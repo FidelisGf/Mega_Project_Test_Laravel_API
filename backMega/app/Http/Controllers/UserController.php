@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\User as ResourcesUser;
 use App\User;
 use Illuminate\Http\Request;
 use RuntimeException;
@@ -15,7 +16,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::paginate(20);
+        return ResourcesUser::collection($users);
     }
 
     /**

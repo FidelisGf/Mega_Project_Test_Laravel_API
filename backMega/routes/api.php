@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/save', [UserController::class, 'store']);
+Route::get('/all', [UserController::class, 'index']);
