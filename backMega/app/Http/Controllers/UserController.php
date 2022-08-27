@@ -27,9 +27,6 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -61,7 +58,17 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            return new ResourcesUser($user);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage()
+                ],
+                400
+            );
+        }
     }
 
     /**
@@ -70,11 +77,6 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -84,9 +86,21 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->update($request->all());
+            return response()->json([
+                "message" => "user has been edited"
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage()
+                ],
+                400
+            );
+        }
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -99,7 +113,7 @@ class UserController extends Controller
     }
 
 
-    public function filterByDate(Request $request)
+    public function filterBetweenDates(Request $request)
     {
 
         $start = Carbon::parse($request->start);
@@ -108,5 +122,11 @@ class UserController extends Controller
         $get_all_user = User::whereBetween('birth_date', [$start, $end])->paginate(15);
 
         return ResourcesUser::collection($get_all_user);
+    }
+
+    public function filterByNewestUsers()
+    {
+        $users = User::orderBy('birth_date', 'desc')->paginate(15);
+        return ResourcesUser::collection($users);
     }
 }
