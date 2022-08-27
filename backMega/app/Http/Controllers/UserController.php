@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\User as ResourcesUser;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use RuntimeException;
 
 class UserController extends Controller
@@ -94,5 +96,17 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function filterByDate(Request $request)
+    {
+
+        $start = Carbon::parse($request->start);
+        $end = Carbon::parse($request->end);
+
+        $get_all_user = User::whereDate('birth_date', '>=', $start->format('YYYY-MM-DD'))->whereDate('birth_date', '<=', $end)->paginate(15);
+
+        return ResourcesUser::collection($get_all_user);
     }
 }
