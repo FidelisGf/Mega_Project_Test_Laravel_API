@@ -105,7 +105,7 @@ class UserController extends Controller
         $start = Carbon::parse($request->start);
         $end = Carbon::parse($request->end);
 
-        $get_all_user = User::whereDate('birth_date', '>=', $start->format('YYYY-MM-DD'))->whereDate('birth_date', '<=', $end)->paginate(15);
+        $get_all_user = User::whereBetween('birth_date', [$start, $end])->paginate(15);
 
         return ResourcesUser::collection($get_all_user);
     }
