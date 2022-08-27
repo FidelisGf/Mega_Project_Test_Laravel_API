@@ -46,6 +46,25 @@
             "Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "version": "dev-main",
+                "name": "josiasfonseca/megabit-laravel",
+                "source": {
+                    "url": "https://github.com/josiasfonseca/megabit-laravel",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": [
+                        ""
+                    ]
+                }
+            }
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
