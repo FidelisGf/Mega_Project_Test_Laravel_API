@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/save', [UserController::class, 'store']);
 Route::get('/all', [UserController::class, 'index']);
 Route::get('/find/{id}', [UserController::class, 'show']);
-Route::post('/findByDate', [UserController::class, 'filterBetweenDates']);
+Route::post('/findBetweenDate', [UserController::class, 'filterBetweenDates']);
 Route::get('/newest', [UserController::class, 'filterByNewestUsers']);
 Route::put('/update/{id}', [UserController::class, 'update']);
+Route::delete('/delete/{id}', [UserController::class, 'destroy']);

@@ -109,24 +109,63 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
+            return response()->json(
+                [
+                    "messsage" => "user has been deleted"
+                ],
+                200
+            );
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage()
+                ],
+                400
+            );
+        }
     }
 
 
     public function filterBetweenDates(Request $request)
     {
-
-        $start = Carbon::parse($request->start);
-        $end = Carbon::parse($request->end);
-
-        $get_all_user = User::whereBetween('birth_date', [$start, $end])->paginate(15);
-
-        return ResourcesUser::collection($get_all_user);
+        try {
+            $start = Carbon::parse($request->start);
+            $end = Carbon::parse($request->end);
+            if ($start > $end) {
+                return response()->json(
+                    [
+                        "message" => "Data inicial maior que a final !"
+                    ],
+                    400
+                );
+            }
+            $get_all_user = User::whereBetween('birth_date', [$start, $end])->paginate(15);
+            return ResourcesUser::collection($get_all_user);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage()
+                ],
+                400
+            );
+        }
     }
 
     public function filterByNewestUsers()
     {
-        $users = User::orderBy('birth_date', 'desc')->paginate(15);
-        return ResourcesUser::collection($users);
+        try {
+            $users = User::orderBy('birth_date', 'desc')->paginate(15);
+            return ResourcesUser::collection($users);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage()
+                ],
+                400
+            );
+        }
     }
 }
